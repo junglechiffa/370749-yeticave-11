@@ -9,9 +9,9 @@ function format_numb($number){
         return $number .₽;  
     }elseif($number >= 1000){
         $number = number_format ( $number , 0 ,"."," " );
-        return $number .₽;
-    };
-};
+        return $number ." ₽";
+    }
+}
 
 /**
  * Подключение шаблонов
@@ -31,6 +31,6 @@ function include_template($name,$data){
 	$result = ob_get_clean();
 
 	return $result;
-};
+}
 
 ?>

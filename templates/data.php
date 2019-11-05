@@ -2,15 +2,10 @@
 
 $is_auth = rand(0, 1);
 $user_name = 'Алексей'; // укажите здесь ваше имя
+$title = "горнолыжное снаряжение";
 
-$categorys=["<script>alert(1);</script>","Доски и лыжи","Крепления","Ботинки","Одежда","Инструменты","Разное"];
+$categorys=["Доски и лыжи","Крепления","Ботинки","Одежда","Инструменты","Разное"];
 $offers=[
-	[
-        'name' => '<script>alert(1);</script>',
-        'category' => '<script>alert(1);</script>',
-        'price' => '<script>alert(1);</script>',
-        'url' => '<script>alert(1);</script>'
-    ],
     [
         'name' => '2014 Rossignol District Snowboard',
         'category' => 'Доски и лыжи',
