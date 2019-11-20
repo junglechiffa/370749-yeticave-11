@@ -83,6 +83,24 @@ function db_sel ($db_connect, $sql){
 	$rows = mysqli_fetch_all($query, MYSQLI_ASSOC);
 	return $rows;
 }
+/**
+ * Добавление цены в массив лота
+ */
+function add_max_price($db_connect, $lots){
+	foreach ($lots as $k => $value) {
+	    $m_price = '
+	        SELECT MAX(price) AS m_price
+	        FROM rate r
+	        WHERE r.lot_id = '.$value["id"].'';
+	    $m_price = db_sel($db_connect,$m_price);
+	    if ($m_price[0]["m_price"] == '') {
+	        $lots[$k]["m_price"] = $value["cost_start"];
+	    }else{
+	        $lots[$k]["m_price"] = $m_price[0]["m_price"];
+	    }          
+	}
+	return $lots;
+}
 ?>
 
 
