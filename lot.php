@@ -2,7 +2,6 @@
 date_default_timezone_set("Europe/Moscow");
 require_once('functions.php');
 require_once('init.php');
-$db_connect = db_connect($db_access, $db_name);
 //Получение категорий 
 $category_list = " SELECT * FROM `category`";
 $category_list = db_sel($db_connect, $category_list);
@@ -14,7 +13,7 @@ if (!isset($_GET['lot_id']) or empty($_GET['lot_id'])){
 }else{
 	//echo "2";
 	//Получение из базы информации по лоту.
-	$lot_id = intval($_GET["lot_id"])
+	$lot_id = intval($_GET["lot_id"]);
 	$lot = '
 	    SELECT l.id, l.name, cost_start, picture, c.name AS c_name, l.data_end, text, cost_step
 	    FROM lot l

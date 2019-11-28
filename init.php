@@ -2,6 +2,7 @@
 
 $is_auth = rand(0, 1);
 $user_name = 'Алексей';
+$user_id = 1;
 $db_access = [
 	'host' => "localhost",
 	'login' => "root",
