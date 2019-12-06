@@ -10,6 +10,7 @@ $category_list = db_sel($db_connect, $category_list);
 $error = [];
 // 0 - отключен, 1 - отладка
 $debug = 0;
+
 //полная очистка массива пост от потенциално опасных символов
 if (isset($_POST) and !empty($_POST)){
 	foreach ($_POST as $k => $v){
@@ -153,7 +154,6 @@ if (isset($_POST) and !empty($_POST)){
 		unset($_SESSION['lot']);
 	}
 }
-
 
 $page_content = include_template ('add_t.php', [
 	'categorys' => $category_list,
