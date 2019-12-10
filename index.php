@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set("Europe/Moscow");
 require_once('functions.php');
-require_once('init.php');
+
 //Отправьте SQL-запрос для получения списка новых лотов;
 $new_lots = "
     SELECT l.id,l.name,cost_start,picture,c.name AS c_name,l.data_end
@@ -14,6 +14,7 @@ $new_lots = db_sel($db_connect, $new_lots);
 //Отправьте SQL-запрос для получения списка категорий;
 $category_list = " SELECT * FROM `category`";
 $category_list = db_sel($db_connect, $category_list);
+
 //Добавление максимальной цены в массив с лотами
 $new_lots = add_max_price($db_connect, $new_lots);
 /*
@@ -22,11 +23,7 @@ print_r($new_lots);
 echo '</pre>';
 */
 // Вывод шаблонов:
-$page_content = include_template('main.php', [
-    'categorys' => $category_list,
-    'new_lots' => $new_lots
-]);
-$layout_content = include_template('layout.php', [
+
     'categorys' => $category_list,
     'page_content' => $page_content,
     'user_name' => $user_name,
@@ -34,21 +31,3 @@ $layout_content = include_template('layout.php', [
 ]);
 print($layout_content);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*<.>*/
-
-
-
-?>

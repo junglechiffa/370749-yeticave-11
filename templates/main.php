@@ -41,10 +41,8 @@
                             <?php 
                                 
                                 $a = lifetime($value['data_end']);
-                                //echo $value['data_end'];
                                 //$a = lifetime("2019-11-18 02:11:09");
                                 //print_r($a);
-                                
                                 if ($a[0] == "00") {
                                     echo 'class="timer--finishing"';
                                 }elseif ($a[0] !=="00") {
