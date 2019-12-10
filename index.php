@@ -31,4 +31,3 @@ echo '</pre>';
 ]);
 print($layout_content);
 
-
