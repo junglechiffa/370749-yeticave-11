@@ -1,8 +1,4 @@
 
-
-<?php echo $value['с_name']; ?>
-
-
   <main>
     <nav class="nav">
       <ul class="nav__list container">

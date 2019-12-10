@@ -6,23 +6,25 @@ use yeti;
 
 CREATE TABLE `yeti`.`category` ( 
 	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
-	`name` VARCHAR(255) NOT NULL, 
-	`name_code` VARCHAR(255) NOT NULL
+	`name` VARCHAR(25) NOT NULL, 
+	`name_code` VARCHAR(30) NOT NULL
 ) ENGINE = MyISAM;
 
 CREATE TABLE `yeti`.`lot` (
 	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`data_start` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	`data_end` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	`name` VARCHAR(255) NOT NULL,
-	`text` TEXT NOT NULL,
+	`name` VARCHAR(25) NOT NULL,
+	`text` TEXT(500) NOT NULL,
 	`picture` VARCHAR(255) NOT NULL,
 	`cost_start` INT NOT NULL,
 	`cost_step` INT NOT NULL,
 	`user_id` INT NOT NULL,
-	`winner_id` INT NOT NULL,
+	`winner_id` INT NOT NULL DEFAULT '0',
 	`category_id` INT NOT NULL
 ) ENGINE = MyISAM;
+
+--ALTER TABLE `lot` CHANGE `winner_id` `winner_id` INT(11) NOT NULL DEFAULT '0';
 
 CREATE TABLE `yeti`.`rate` (
 	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -36,7 +38,7 @@ CREATE TABLE `yeti`.`user` (
 	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`data_create` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	`email`  VARCHAR(255) NOT NULL,
-	`name` VARCHAR(255) NOT NULL,
+	`name` VARCHAR(25) NOT NULL,
 	`password` VARCHAR(255) NOT NULL,
 	`contact` VARCHAR(255) NOT NULL
 ) ENGINE = MyISAM;

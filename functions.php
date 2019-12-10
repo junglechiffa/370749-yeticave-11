@@ -93,8 +93,6 @@ function add_max_price($db_connect, $lots){
 	        FROM rate r
 	        WHERE r.lot_id = '.$value["id"].'';
 
-	    $m_price = db_sel($db_connect,$m_price);
-
 	    if ($m_price[0]["m_price"] == '') {
 	        $lots[$k]["m_price"] = $value["cost_start"];
 	    }else{
@@ -103,6 +101,48 @@ function add_max_price($db_connect, $lots){
 	}
 	return $lots;
 }
+
+        $func = 'mysqli_stmt_bind_param';
+        $func(...$values);
+
+        if (mysqli_errno($link) > 0) {
+            $errorMsg = 'Не удалось связать подготовленное выражение с параметрами: ' . mysqli_error($link);
+            die($errorMsg);
+        }
+    }
+
+    return $stmt;
+}
+/**
+ * 
+ */
+function db_fetch_data($link, $sql, $data = []){
+	$result = [];
+	$stmt = db_get_prepare_stmt($link, $sql, $data);
+	$res = mysqli_execute($stmt);
+	if($res){
+		$result = mysql_fetch_all($res, MYSQLI_ASSOC);
+	}
+	return $result;
+}
+/**
+ * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
+ *
+ * Примеры использования:
+ * is_date_valid('2019-01-01'); // true
+ * is_date_valid('2016-02-29'); // true
+ * is_date_valid('2019-04-31'); // false
+ * is_date_valid('10.10.2010'); // false
+ * is_date_valid('10/10/2010'); // false
+ *
+ * @param string $date Дата в виде строки
+ *
+ * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
+ */
+function is_date_valid(string $date) : bool {
+    $format_to_check = 'Y-m-d';
+    $dateTimeObj = date_create_from_format($format_to_check, $date);
+
+    return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
+}
 ?>
-
-
