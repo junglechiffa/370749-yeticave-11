@@ -27,11 +27,6 @@ if (isset($_POST) and !empty($_POST)){
 	$message= trim($_POST['message']);
 	$lot_rate = intval(trim($_POST['lot-rate']));
 	$lot_step = intval(trim($_POST['lot-step']));
-	$lot_date = $_POST['lot-date']; 
-
-	if (strlen($lot_date) < 8 and strlen($lot_date) >2) {
-		$lot_date = $_POST['lot-date'] . " 00:00:00"; 
-	}
 
 	$lot_pic = $_FILES['lot_pic']['tmp_name']; 
 	$lot = ["lot_name" => $lot_name, "category" => $category, "message" => $message, "lot_rate" => $lot_rate, "lot_step" => $lot_step, "lot_date" => $lot_date, "lot_pic" => $lot_pic];
@@ -159,6 +154,7 @@ if (isset($_POST) and !empty($_POST)){
 		unset($_SESSION['lot']);
 	}
 }
+
 
 $page_content = include_template ('add_t.php', [
 	'categorys' => $category_list,
