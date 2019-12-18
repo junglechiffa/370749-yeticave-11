@@ -33,4 +33,3 @@ $layout_content = include_template('layout.php', [
     'title' => $title
 ]);
 print($layout_content);
-//test
