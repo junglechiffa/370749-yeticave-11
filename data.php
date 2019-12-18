@@ -2,13 +2,7 @@
 
 $is_auth = rand(0, 1);
 $user_name = 'Алексей'; // укажите здесь ваше имя
-$db_access = [
-	'host' => "localhost",
-	'login' => "root",
-	'password' => ''
-];
-$db_name = "yeti";
-/*
+
 $categorys=["Доски и лыжи","Крепления","Ботинки","Одежда","Инструменты","Разное"];
 $offers=[
     [
