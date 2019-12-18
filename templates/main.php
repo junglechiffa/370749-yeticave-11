@@ -6,7 +6,7 @@
         <ul class="promo__list">
 
             <?php foreach ($categorys as $value): ?>
-            <li class = "promo__item promo__item--<?= $value[‘name’]; ?>">
+            <li class = "promo__item promo__item--<?= $value['name']; ?>">
                 <a class="promo__link" href="pages/all-lots.html"><?= htmlspecialchars($value['name']); ?></a>
             </li>
             <?php endforeach; ?>
@@ -26,7 +26,7 @@
                 </div>
                 <div class="lot__info">
                     <span class="lot__category"><?= htmlspecialchars($value['c_name']); ?></span>
-                    <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?= htmlspecialchars($value['name']); ?></a></h3>
+                    <h3 class="lot__title"><a class="text-link" href="lot.php/?lot_id=<?= $value['id']; ?>"><?= htmlspecialchars($value['name']); ?></a></h3>
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount"><?= format_numb(htmlspecialchars($value['cost_start'])); ?></span>
@@ -41,10 +41,8 @@
                             <?php 
                                 
                                 $a = lifetime($value['data_end']);
-                                //echo $value['data_end'];
                                 //$a = lifetime("2019-11-18 02:11:09");
                                 //print_r($a);
-                                
                                 if ($a[0] == "00") {
                                     echo 'class="timer--finishing"';
                                 }elseif ($a[0] !=="00") {
