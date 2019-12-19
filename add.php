@@ -10,6 +10,7 @@ $category_list = db_sel($db_connect, $category_list);
 $error = [];
 // 0 - отключен, 1 - отладка
 $debug = 0;
+
 //полная очистка массива пост от потенциално опасных символов
 if (isset($_POST) and !empty($_POST)){
 	foreach ($_POST as $k => $v){
@@ -26,7 +27,12 @@ if (isset($_POST) and !empty($_POST)){
 	$message= trim($_POST['message']);
 	$lot_rate = intval(trim($_POST['lot-rate']));
 	$lot_step = intval(trim($_POST['lot-step']));
-	$lot_date = $_POST['lot-date'] . " 00:00:00"; 
+	$lot_date = $_POST['lot-date']; 
+
+	if (strlen($lot_date) < 8 and strlen($lot_date) >2) {
+		$lot_date = $_POST['lot-date'] . " 00:00:00"; 
+	}
+
 	$lot_pic = $_FILES['lot_pic']['tmp_name']; 
 	$lot = ["lot_name" => $lot_name, "category" => $category, "message" => $message, "lot_rate" => $lot_rate, "lot_step" => $lot_step, "lot_date" => $lot_date, "lot_pic" => $lot_pic];
 
@@ -62,7 +68,7 @@ if (isset($_POST) and !empty($_POST)){
 	}elseif($l_date < $next_day){
 		$error['lot_date'] = "Минимальное время жизни лота - 24 часа";
 	}
-// Содержимое поля «шаг ставки» должно быть целым числом больше нуля.
+	// Содержимое поля «шаг ставки» должно быть целым числом больше нуля.
 
 	if (intval($lot_step) < 1) {
 		$error['lot_step'] = "Содержимое поля «шаг ставки» должно быть целым числом больше ноля.";
@@ -113,18 +119,22 @@ if (isset($_POST) and !empty($_POST)){
 		if (mysqli_query($db_connect, $sql_nl)){
 			if ($debug == 1) {
 				echo "лот добавлен, нужен редирект";
-			}
+			}else{
 			$lot_id = mysqli_insert_id($db_connect);
 			header("Location: /lot.php/?lot_id=" . $lot_id);
 			die();
+			}
 		}else{
 			echo mysqli_error($db_connect);
 		}
-	}else{
+	}
+	/*
+	else{
 		$_SESSION['error'] = $error;
 		$_SESSION['lot'] = $lot;
 		header("Location: /add.php");
 	}
+	*/
 
 	if ($debug == 1) {
 		echo '<pre>'. "пост"; 
@@ -143,7 +153,9 @@ if (isset($_POST) and !empty($_POST)){
 		print_r($error);
 		echo '</pre>';
 	}
-}else{
+}
+/*
+else{
 	if (isset($_SESSION['error'])) {
 		$error = $_SESSION['error'];
 		unset($_SESSION['error']);
@@ -153,7 +165,7 @@ if (isset($_POST) and !empty($_POST)){
 		unset($_SESSION['lot']);
 	}
 }
-
+*/
 
 $page_content = include_template ('add_t.php', [
 	'categorys' => $category_list,
