@@ -1,3 +1,7 @@
+
+
+
+
 INSERT INTO `category` 
 	SET name = 'Доски и лыжи', 
 		name_code = 'Boards and skis';
