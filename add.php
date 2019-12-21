@@ -1,6 +1,5 @@
 <?php
 date_default_timezone_set("Europe/Moscow");
-session_start();
 require_once('functions.php');
 require_once('init.php');
 
@@ -10,6 +9,21 @@ $category_list = db_sel($db_connect, $category_list);
 $error = [];
 // 0 - отключен, 1 - отладка
 $debug = 0;
+
+//Аутентификация
+if (!isset($_SESSION['user'])) {
+	$error = "403";
+	$page_content = include_template('error.php', [
+		'error' => $error]);
+	$layout_content = include_template ('layout.php', [
+	    'categorys' => $category_list,
+	    'page_content' => $page_content,
+	    'user_name' => $user_name,
+	    'title' => $title
+	]);
+	print($layout_content);
+	die();
+}
 
 //полная очистка массива пост от потенциално опасных символов
 if (isset($_POST) and !empty($_POST)){
@@ -107,12 +121,12 @@ if (isset($_POST) and !empty($_POST)){
 				current_timestamp(), 
 				'".$lot_date."',
 				'".$lot_name."',
-				'$message',
-				'$file_path',
-				'$lot_rate',
-				'$lot_step',
-				'$user_id',
-				'$category'
+				'".$message."',
+				'".$file_path."',
+				'".$lot_rate."',
+				'".$lot_step."',
+				'".$_SESSION['user']['id']."',
+				'".$category."'
 			)";
 
 		//Если лот добавлен, редирект на страницу лота. Если нет, ошибка sql
