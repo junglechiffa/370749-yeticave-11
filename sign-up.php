@@ -1,6 +1,5 @@
 <?php
 date_default_timezone_set("Europe/Moscow");
-session_start();
 require_once('functions.php');
 require_once('init.php');
 
@@ -10,6 +9,12 @@ $category_list = db_sel($db_connect, $category_list);
 $error = [];
 // 0 - отключен, 1 - отладка
 $debug = 0;
+
+//Если пользователь уже авторизован
+if (isset($_SESSION['user'])) {
+  header("Location: /");
+  die();
+}
 
 //полная очистка массива пост от потенциално опасных символов
 if (isset($_POST) and !empty($_POST)){
