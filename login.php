@@ -1,8 +1,15 @@
 <?php
 date_default_timezone_set("Europe/Moscow");
-session_start();
 require_once('functions.php');
 require_once('init.php');
+
+//Если пользователь уже авторизован
+if (isset($_SESSION['user'])) {
+  header("Location: /");
+  die();
+}
+
+
 
 //Получение категорий 
 $category_list = " SELECT * FROM `category`";
@@ -10,7 +17,7 @@ $category_list = db_sel($db_connect, $category_list);
 $error = [];
 // 0 - отключен, 1 - отладка
 $debug = 0;
-/*
+
 //полная очистка массива пост от потенциално опасных символов
 if (isset($_POST) and !empty($_POST)){
   foreach ($_POST as $k => $v){
@@ -24,13 +31,11 @@ if (isset($_POST) and !empty($_POST)){
   //назначение переменных для вставки в запрос
   $email = trim($_POST['email']);
   $password = $_POST['password'];
-  $message= trim($_POST['message']);
-  $name = trim($_POST['name']);
-  $s_up = ["email" => $email, "password" => $password, "message" => $message, "name" => $name];
+  $auth = ["email" => $email, "password" => $password];
   $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
   // Проверка всех полей на пустоту
-  foreach ($s_up as $k => $v) {
+  foreach ($auth as $k => $v) {
     if (trim($v) == '') {
       $error[$k] = "Поле обязательно для заполнения";
     }
@@ -42,73 +47,58 @@ if (isset($_POST) and !empty($_POST)){
   if (strlen($password) > 25) {
     $error['password'] = "Пароль слишком длинный";
   }
-  if (strlen($message) > 255) {
-    $error['message'] = "Текст слишком длинный";
-  }
-  if (strlen($name) > 25) {
-    $error['name'] = "Имя слишком длинное";
-  }
   //На формат мейла
-  if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+  if ($auth['email'] !== "" AND !filter_var($email, FILTER_VALIDATE_EMAIL)) {
       $error['email'] = "Неправильный формат email";
   }
-  // Проверка имени на уникальность
-  $uniq_name = "SELECT count(*) FROM `user` WHERE `name` ='".$name."'";
-  $uniq_name = db_sel($db_connect, $uniq_name);
-  if ($uniq_name['0']['count(*)'] !== '0'){
-    $error['name'] = "Пользователь с таким именем уже существует";
-  }
-  // Проверка мейла на уникальность
-  $uniq_mail = "SELECT count(*) FROM `user` WHERE `email` ='".$email."'";
-  $uniq_mail = db_sel($db_connect, $uniq_mail);
-  if ($uniq_mail['0']['count(*)'] !== '0'){
-    $error['email'] = "Пользователь с таким email уже зарегистрирован";
-  }
-
-  //Запрос на добавление нового пользователя
+  //Получаем массив с пользователем
   if (empty($error)) {
-    $sql_nl = "INSERT INTO `user` (
-        `data_create`,  
-        `email`,
-        `name`,  
-        `password`, 
-        `contact`) 
-        VALUES (
-        current_timestamp(), 
-        '".$email."',
-        '".$name."',
-        '".$password_hash."',
-        '".$message."'
-      )";
-
-    //Если успешно, редирект на главную страницу. Если нет, ошибка sql
-    if (mysqli_query($db_connect, $sql_nl)){
-      if ($debug == 1) {
-        echo "пользователь добавлен, нужен редирект";
+    $user = "SELECT * FROM `user` WHERE email = '".$email."' ";
+    //       SELECT * FROM `user` WHERE email = 'alesha@mail.ru'
+    $user = db_sel($db_connect, $user);
+    if (!empty($user) and isset($user[0])) {
+      if (password_verify($auth['password'], $user['0']['password'])) {
+        $_SESSION['user'] = $user['0'];
       }else{
-        header("Location: /");
-      die();
+        $error['password'] = "Пароль указан не верно";
       }
     }else{
-      echo mysqli_error($db_connect);
+      $error['email'] = "Пользователя с таким email не существует";
+    }
+  }
+
+  //Если успешно, редирект на главную страницу. 
+  if (empty($error) and isset($_SESSION['user'])){
+    if ($debug == 1) {
+      echo "авторизация пройдена, нужен редирект";
+    }else{
+      header("Location: /");
+      die();
     }
   }
 
   //Отладочная информация 
   if ($debug == 1) {
 
-    echo "____________________________".$uniq_name['0']['count(*)'];
+    echo '<pre>'. "сессия"; 
+    print_r($_SESSION);
+    echo '</pre>';
 
-    echo '<pre>'. "пост"; 
-    print_r($uniq_name);
+
+    echo '<pre>'. "user"; 
+    if (is_array($user)) {
+      print_r($user);
+    }else{
+      echo "1".$user;
+    }
     echo '</pre>';
 
     echo '<pre>'. "пост"; 
     print_r($_POST);
     echo '</pre>';
 
-    echo '<pre>'. "s_up"; 
-    print_r($s_up);
+    echo '<pre>'. "auth"; 
+    print_r($auth);
     echo '</pre>';
 
     echo '<pre>'. "ошибки"; 
@@ -116,10 +106,15 @@ if (isset($_POST) and !empty($_POST)){
     echo '</pre>';
   }
 }
-*/
+echo '<pre>'. "сессия";
+  echo "1";
+  print_r($_SESSION['user']);
+echo '</pre>';
+
+
 $page_content = include_template ('login-t.php', [
   'categorys' => $category_list,
-  's_up' => $s_up,
+  'auth' => $auth,
   'error' => $error
 ]);
 
