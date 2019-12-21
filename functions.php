@@ -78,10 +78,11 @@ function db_sel ($db_connect, $sql){
 	if (!$query) {
 	    $error = mysqli_error($db_connect);
 	    print ($error);
+	    return "";
+	}else{
+		$rows = mysqli_fetch_all($query, MYSQLI_ASSOC);
+		return $rows;
 	}
-
-	$rows = mysqli_fetch_all($query, MYSQLI_ASSOC);
-	return $rows;
 }
 /**
  * Добавление цены в массив лота
