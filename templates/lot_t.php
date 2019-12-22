@@ -28,7 +28,7 @@
                 //$a = lifetime("2019-11-18 02:11:09");
                 //print_r($a);
                 if ($a[0] == "00") {
-                    echo 'class="timer--finishing"';
+                    echo 'class="lot-item__timer timer timer--finishing"';
                 }elseif ($a[0] !=="00") {
                     echo 'class="lot-item__timer timer"';
                 }                
