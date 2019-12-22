@@ -47,7 +47,7 @@ CREATE TABLE `yeti`.`user` (
 CREATE UNIQUE INDEX name ON category(name);
 CREATE UNIQUE INDEX name_code ON category(name_code);
 
-CREATE UNIQUE INDEX lot_name ON lot(name);
+CREATE FULLTEXT INDEX lot_search ON lot(name, text);
 CREATE INDEX cost_start ON lot(cost_start);
 CREATE INDEX cost_step ON lot(cost_step);
 CREATE INDEX user_id ON lot(user_id);
